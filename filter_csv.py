@@ -7,6 +7,7 @@
 
 import argparse
 import csv
+from email import header
 
 
 def main():
@@ -15,8 +16,18 @@ def main():
     parser.add_argument("filename", help="the CSV file to read")
     parser.add_argument("column", help="the name of the column to match on")
     parser.add_argument("value", help="the value to match")
-
     args = parser.parse_args()
+
+
+    with open(args.filename) as f:
+        line = csv.reader(f)
+        first_row = next(line)
+
+        indexColumn=first_row.index(args.column)
+
+        for row in line:
+            if row[indexColumn] == args.value:
+                print(",".join(row))
 
     # TODO: open args.filename and read it with csv.reader. The first row is the
     #   header. Find the position of args.column within the header, then print every
